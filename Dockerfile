@@ -1,27 +1,47 @@
-# Maven build container 
+# Stage 01: Builder
+FROM maven:3.6.3-openjdk-8-slim as builder
+WORKDIR /app
 
-FROM maven:3.6.3-openjdk-11 AS maven_build
+# Copying source files
+COPY . .
 
-COPY pom.xml /tmp/
+RUN mvn clean install \
+    && ls -la
 
-COPY src /tmp/src/
+# Stage 02: runtime
+FROM alpine:3.11.5
 
-WORKDIR /tmp/
+RUN apk add --no-cache python3 \
+    && python3 -m ensurepip \
+    && pip3 install --upgrade pip setuptools \
+    && rm -r /usr/lib/python*/ensurepip && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+    rm -r /root/.cache
 
-RUN mvn package
+WORKDIR /app
 
-#pull base image
+ENV JAR_FILE=target/hello-world-0.1.0.jar
+ENV JAVA_APP_DIR=/app
+ENV JAVA_MAJOR_VERSION=8
 
-FROM openjdk
+COPY --from=builder "/app/$JAR_FILE" /app/
 
-#maintainer 
-MAINTAINER dstar55@yahoo.com
-#expose port 8080
-EXPOSE 8080
+RUN pip install -r requirements.in
 
-#default command
-CMD java -jar /data/hello-world-0.1.0.jar
+RUN apk update \
+    && apk add --virtual \
+    build-dependencies \
+    openjdk8 \
+    # please remove once app has shifted to an ORM implementation
+    # If removed, to accomplish admin tasks from within container
+    # execute `apk add mysql-client` (needs disabling SecurityContext of pod - runAsRoot: true)
+    mysql-client \
+    redis \
+    # required for es admin script execution
+    ca-certificates \
+    curl 
 
-#copy hello world to docker image from builder image
+EXPOSE 80
 
-COPY --from=maven_build /tmp/target/hello-world-0.1.0.jar /data/hello-world-0.1.0.jar
+CMD ["java", "-jar", "hello-world-0.1.0.jar"]
