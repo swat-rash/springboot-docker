@@ -22,14 +22,13 @@ jobs:
       uses: actions/checkout@master
 
     # Add steps here like linting, testing, minification, etc.
-      
-    - name: Setup ECR
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build and tag image to Amazon ECR
       run: |
-        # Login to AWS ECR
-        $( aws ecr get-login-password )
-    - name: Build and tag the image
-      run: |
-        # Build and tag the image
         docker build \
           -t $CONTAINER_IMAGE \
           -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE .
