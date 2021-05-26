@@ -27,8 +27,6 @@ ENV JAVA_MAJOR_VERSION=8
 
 COPY --from=builder "/app/$JAR_FILE" /app/
 
-RUN pip install -r requirements.in
-
 RUN apk update \
     && apk add --virtual \
     build-dependencies \
