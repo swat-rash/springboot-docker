@@ -38,26 +38,7 @@ jobs:
       run: |
         docker build \
           -t $CONTAINER_IMAGE \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE .
- 
-    # Set image tag in kustomization
-
-    - name: Set image tag
-      run: |
-          cd deploy
-          kustomize edit set image $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
-          cat kustomization.yaml
-    - name: Commit kustomization
-      run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -a -m "$CONTAINER_IMAGE"
-    - name: Push changes to master
-      uses: ad-m/github-push-action@master
-      with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
-          force: true       
+          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE .      
     
     # Add additional steps here like scanning of image
 
