@@ -21,7 +21,7 @@ spec:
         image: 800515068415.dkr.ecr.ap-south-1.amazonaws.com/swati-test:tag
         #image: REGISTRY/IMAGE:TAG
         ports:
-        - containerPort: 5000
+        - containerPort: 80
         resources:
           requests:
             cpu: 250m
