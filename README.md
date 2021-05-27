@@ -6,7 +6,7 @@ Installed:
 [Docker](https://www.docker.com/)   
 [git](https://www.digitalocean.com/community/tutorials/how-to-contribute-to-open-source-getting-started-with-git)   
 
-Optional:   
+#Optional:   
 [Docker-Compose](https://docs.docker.com/compose/install/)   
 [Java 1.8 or 11.1](https://www.oracle.com/technetwork/java/javase/overview/index.html)   
 [Maven 3.x](https://maven.apache.org/install.html)
