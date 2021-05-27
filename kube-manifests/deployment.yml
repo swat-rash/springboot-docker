@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: aws-example-octodex
-        image: 800515068415.dkr.ecr.ap-south-1.amazonaws.com/swati-test:tag
+        image: 800515068415.dkr.ecr.ap-south-1.amazonaws.com/swati-test:5348a9575eb765666ed6d205625ff97135d39383
         #image: REGISTRY/IMAGE:TAG
         ports:
         - containerPort: 80
